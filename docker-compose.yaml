@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./technopark_db_forum
+    container_name: app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - APP_DB_HOST=db
+      - APP_DB_PORT=5432
+      - APP_DB_NAME=forum
+      - APP_DB_USERNAME=forum
+      - APP_DB_PASSWORD=forum
+    restart: always
+    # deploy:
+    #   replicas: 3
+    #   restart_policy:
+    #     condition: on-failure
+
+  db:
+    container_name: postgre-db
+    image: postgres:alpine
+    volumes:
+      - ./technopark_db_forum/db:/docker-entrypoint-initdb.d/
+    environment:
+      - POSTGRES_PASSWORD=forum
+      - POSTGRES_USER=forum
+      - POSTGRES_DB=forum
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
