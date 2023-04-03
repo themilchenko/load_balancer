@@ -1,0 +1,4 @@
+[submodule "technopark_db_forum"]
+	path = technopark_db_forum
+	url = https://github.com/themilchenko/technopark_db_forum.git
+	branch = balancing
